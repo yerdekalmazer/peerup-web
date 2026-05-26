@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 export default function Hero() {
@@ -63,57 +64,18 @@ export default function Hero() {
         </div>
 
         {/* Phone mockup */}
-        <div className="phone-wrap reveal reveal-delay-2" aria-hidden="true">
-          <div className="phone" role="img" aria-label="PeerUP uygulama önizlemesi">
+        <div className="phone-wrap reveal reveal-delay-2">
+          <div className="phone" role="img" aria-label="PeerUp uygulama önizlemesi">
             <div className="phone-inner">
-              <div className="phone-notch" />
-              <div className="phone-screen">
-                <div className="phone-header">
-                  <div className="phone-greeting">Merhaba, Taha</div>
-                  <div className="phone-title">Bugün ne öğrenmek istiyorsun?</div>
-                </div>
-                <div className="phone-coin-card">
-                  <div>
-                    <div className="phone-coin-label">SkillCoin Bakiyesi</div>
-                    <div className="phone-coin-amount">4.6 SC</div>
-                  </div>
-                  <div className="phone-coin-add">+ Yükle</div>
-                </div>
-                <div className="phone-search">Beceri veya öğretmen ara...</div>
-                <div className="phone-bottom">
-                  <div className="phone-section-label">Öne Çıkan Öğretmenler</div>
-                  <div className="phone-teachers-row">
-                    {[
-                      { initials: "ZA", bg: "#6366F1", name: "Zeynep A.", skill: "React Native", coin: "1.2 SC/saat" },
-                      { initials: "AD", bg: "#F59E0B", name: "Ayşe D.", skill: "UI/UX", coin: "1.4 SC/saat" },
-                      { initials: "CY", bg: "#10B981", name: "Can Y.", skill: "Piyano", coin: "1.0 SC/saat" },
-                    ].map((t) => (
-                      <div className="phone-teacher-card" key={t.name}>
-                        <div className="phone-teacher-avatar" style={{ background: t.bg }}>{t.initials}</div>
-                        <div className="phone-teacher-name">{t.name}</div>
-                        <div className="phone-teacher-skill">{t.skill}</div>
-                        <div className="phone-teacher-coin">{t.coin}</div>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="phone-section-label" style={{ marginTop: "4px" }}>Popüler Beceriler</div>
-                  {[
-                    { initials: "ES", bg: "#EC4899", skill: "Python", teacher: "Elif Şahin" },
-                    { initials: "MK", bg: "#4F46E5", skill: "İspanyolca", teacher: "Mehmet Kaya" },
-                  ].map((r) => (
-                    <div className="phone-row-item" key={r.skill}>
-                      <div className="phone-row-left">
-                        <div className="phone-mini-avatar" style={{ background: r.bg }}>{r.initials}</div>
-                        <div>
-                          <div className="phone-row-skill">{r.skill}</div>
-                          <div className="phone-row-teacher">{r.teacher}</div>
-                        </div>
-                      </div>
-                      <div className="phone-row-book">Rezerve</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <div className="phone-notch" aria-hidden="true" />
+              <Image
+                src="/landing/home.png"
+                alt="PeerUp Ana Sayfa ekran görüntüsü"
+                width={918}
+                height={1989}
+                priority
+                className="phone-screenshot"
+              />
             </div>
           </div>
 

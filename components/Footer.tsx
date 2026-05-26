@@ -1,12 +1,5 @@
 import Link from "next/link";
-
-const LogoIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-    <path d="M17 7C17 9.76142 14.7614 12 12 12C9.23858 12 7 9.76142 7 7C7 4.23858 9.23858 2 12 2C14.7614 2 17 4.23858 17 7Z" fill="white" />
-    <path d="M21 17C21 19.7614 18.7614 22 16 22C13.2386 22 11 19.7614 11 17C11 14.2386 13.2386 12 16 12C18.7614 12 21 14.2386 21 17Z" fill="rgba(255,255,255,0.6)" />
-    <path d="M13 17C13 19.7614 10.7614 22 8 22C5.23858 22 3 19.7614 3 17C3 14.2386 5.23858 12 8 12C10.7614 12 13 14.2386 13 17Z" fill="rgba(255,255,255,0.35)" />
-  </svg>
-);
+import { LogoMark, Wordmark } from "./Logo";
 
 const PLATFORM_LINKS = [
   { label: "Nasıl Çalışır", href: "#nasil-calisir" },
@@ -35,11 +28,15 @@ export default function Footer() {
       <div className="container">
         <div className="footer-grid">
           <div>
-            <Link className="footer-logo" href="/" aria-label="PeerUP Ana Sayfa">
-              <div className="footer-logo-icon">
-                <LogoIcon />
-              </div>
-              <span className="footer-logo-text">PeerUP</span>
+            <Link className="footer-logo" href="/" aria-label="PeerUp Ana Sayfa">
+              <span className="footer-logo-icon">
+                <LogoMark size={22} />
+              </span>
+              <Wordmark
+                className="footer-logo-text"
+                peerColor="#fff"
+                upColor="#FFD580"
+              />
             </Link>
             <p className="footer-desc">
               Peer-to-peer beceri takası platformu. Becerini öğret, SkillCoin

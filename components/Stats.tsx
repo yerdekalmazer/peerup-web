@@ -61,9 +61,8 @@ const STATS = [
   },
 ];
 
-function formatValue(val: number, target: number, decimals: boolean, suffix: string) {
+function formatValue(val: number, _target: number, decimals: boolean, suffix: string) {
   if (decimals) return val.toFixed(1) + suffix;
-  if (target >= 1000) return val.toLocaleString("tr-TR") + suffix;
   return Math.round(val) + suffix;
 }
 
@@ -123,8 +122,6 @@ export default function Stats() {
               >
                 {stat.decimals
                   ? stat.value.toFixed(1) + stat.suffix
-                  : stat.value >= 1000
-                  ? stat.value.toLocaleString("tr-TR") + stat.suffix
                   : stat.value + stat.suffix}
               </div>
               <div className="stat-label">{stat.label}</div>

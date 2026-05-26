@@ -39,18 +39,18 @@ export default function HowItWorks() {
   return (
     <section className="how" id="nasil-calisir" aria-labelledby="how-heading">
       <div className="container">
-        <div className="how-header">
-          <div className="badge reveal" style={{ margin: "0 auto 16px" }}>
+        <div className="section-head">
+          <span className="badge reveal">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
               <circle cx="12" cy="12" r="10" />
               <polyline points="12 8 12 12 14 14" />
             </svg>
             Nasıl Çalışır?
-          </div>
+          </span>
           <h2 className="section-title reveal" id="how-heading">
             Üç Adımda Başla
           </h2>
-          <p className="section-sub reveal" style={{ margin: "16px auto 0", textAlign: "center" }}>
+          <p className="section-sub reveal">
             PeerUP&apos;ı kullanmaya başlamak çok basit. Birkaç dakika içinde
             öğrenmeye ve öğretmeye hazır olacaksın.
           </p>

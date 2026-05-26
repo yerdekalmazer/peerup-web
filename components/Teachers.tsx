@@ -68,8 +68,8 @@ export default function Teachers() {
   return (
     <section className="teachers" id="ogretmenler" aria-labelledby="teachers-heading">
       <div className="container">
-        <div className="teachers-header">
-          <div className="badge reveal" style={{ margin: "0 auto 16px" }}>
+        <div className="section-head">
+          <span className="badge reveal">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
               <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
               <circle cx="9" cy="7" r="4" />
@@ -77,11 +77,11 @@ export default function Teachers() {
               <path d="M16 3.13a4 4 0 0 1 0 7.75" />
             </svg>
             Öğretmenlerimiz
-          </div>
+          </span>
           <h2 className="section-title reveal" id="teachers-heading">
-            Uzman Öğretmenlerle<br />Tanış
+            Uzman Öğretmenlerle Tanış
           </h2>
-          <p className="section-sub reveal" style={{ margin: "16px auto 0", textAlign: "center" }}>
+          <p className="section-sub reveal">
             Doğrulanmış, deneyimli ve tutkulu öğretmenlerden birebir öğrenme
             deneyimi yaşa.
           </p>

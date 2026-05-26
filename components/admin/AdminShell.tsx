@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import Icon from "./Icon";
 import { Avatar } from "./ui";
+import { LogoMark, Wordmark } from "@/components/Logo";
 import { api } from "@/lib/admin-client";
 
 type NavItem = {
@@ -82,13 +83,15 @@ export default function AdminShell({
         }`}
       >
         <div className="flex items-center gap-2.5 px-5 py-5">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-600 text-base font-extrabold text-white">
-            P
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-600">
+            <LogoMark size={20} />
           </div>
           <div>
-            <p className="text-sm font-extrabold leading-tight text-slate-800">
-              PeerUP
-            </p>
+            <Wordmark
+              className="text-sm font-extrabold leading-tight"
+              peerColor="#1E293B"
+              upColor="#4F46E5"
+            />
             <p className="text-[11px] text-slate-400">Yönetim Paneli</p>
           </div>
         </div>

@@ -6,13 +6,13 @@ export default function CTASection() {
 
       <div className="container">
         <div className="cta-inner">
-          <div className="cta-badge reveal" style={{ display: "inline-flex", margin: "0 auto 24px" }}>
+          <span className="cta-badge reveal">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" />
               <polygon points="10 8 16 12 10 16 10 8" fill="currentColor" stroke="none" />
             </svg>
             Ücretsiz Başla
-          </div>
+          </span>
 
           <h2 className="cta-title reveal" id="cta-heading">
             Bugün Öğretmeye<br />Başla

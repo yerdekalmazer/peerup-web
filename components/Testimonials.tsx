@@ -26,17 +26,17 @@ export default function Testimonials() {
   return (
     <section className="testimonials" id="yorumlar" aria-labelledby="testimonials-heading">
       <div className="container">
-        <div className="testimonials-header">
-          <div className="badge reveal" style={{ margin: "0 auto 16px" }}>
+        <div className="section-head">
+          <span className="badge reveal">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
               <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
             </svg>
             Kullanıcı Yorumları
-          </div>
+          </span>
           <h2 className="section-title reveal" id="testimonials-heading">
             Onlar Çoktan Başladı
           </h2>
-          <p className="section-sub reveal" style={{ margin: "16px auto 0", textAlign: "center" }}>
+          <p className="section-sub reveal">
             Binlerce kullanıcı PeerUP ile becerilerini geliştiriyor. Onların
             deneyimlerini okuyun.
           </p>
