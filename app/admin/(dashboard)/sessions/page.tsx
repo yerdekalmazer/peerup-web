@@ -127,6 +127,37 @@ export default function SessionsPage() {
     }
   }
 
+  async function cancelWithRefund(s: Session) {
+    if (s.status === "cancelled") return;
+    const refund = confirm(
+      `"${s.skill}" oturumu iptal edilsin mi?\nTAMAM: kullanıcıya ${s.cost} SkillCoin iade.\nİPTAL: sadece iptal et, iade yok.`,
+    );
+    try {
+      await api.post(`/api/admin/sessions/${s.id}/cancel`, { refund });
+      await load();
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "İptal edilemedi");
+    }
+  }
+
+  async function manualRefund(s: Session) {
+    const raw = prompt(
+      `"${s.skill}" için iade miktarı? Boş bırakırsan oturum ücreti (${s.cost}) iade edilir.`,
+    );
+    if (raw === null) return;
+    const amount = raw.trim() === "" ? undefined : Number(raw);
+    try {
+      await api.post(`/api/admin/sessions/${s.id}/refund`, {
+        amount,
+        reason: prompt("İade nedeni:") ?? "",
+      });
+      alert("İade tamamlandı");
+      await load();
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "İade başarısız");
+    }
+  }
+
   const filters = [
     { key: "", label: "Tümü" },
     { key: "upcoming", label: "Yaklaşan" },
@@ -140,10 +171,19 @@ export default function SessionsPage() {
         title="Oturumlar"
         subtitle={`${sessions?.length ?? 0} kayıt`}
         action={
-          <Button onClick={openCreate}>
-            <Icon name="plus" size={16} />
-            Yeni Oturum
-          </Button>
+          <div className="flex flex-wrap items-center gap-2">
+            <a
+              href="/api/admin/exports/sessions.csv"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50"
+            >
+              <Icon name="download" size={14} />
+              CSV
+            </a>
+            <Button onClick={openCreate}>
+              <Icon name="plus" size={16} />
+              Yeni Oturum
+            </Button>
+          </div>
         }
       />
 
@@ -226,6 +266,26 @@ export default function SessionsPage() {
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex justify-end gap-1">
+                        {s.status !== "cancelled" && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => cancelWithRefund(s)}
+                            className="hover:bg-amber-50 hover:text-amber-700"
+                            aria-label="İptal et"
+                          >
+                            <Icon name="ban" size={15} />
+                          </Button>
+                        )}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => manualRefund(s)}
+                          className="hover:bg-emerald-50 hover:text-emerald-700"
+                          aria-label="Manuel iade"
+                        >
+                          <Icon name="refresh" size={15} />
+                        </Button>
                         <Button
                           variant="ghost"
                           size="sm"

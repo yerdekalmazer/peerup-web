@@ -37,10 +37,14 @@ async function forward(
     );
   }
 
-  const text = await res.text();
-  return new NextResponse(text, {
+  const contentType = res.headers.get("content-type") ?? "application/json";
+  const buffer = await res.arrayBuffer();
+  const passthrough: Record<string, string> = { "Content-Type": contentType };
+  const disp = res.headers.get("content-disposition");
+  if (disp) passthrough["Content-Disposition"] = disp;
+  return new NextResponse(buffer, {
     status: res.status,
-    headers: { "Content-Type": "application/json" },
+    headers: passthrough,
   });
 }
 

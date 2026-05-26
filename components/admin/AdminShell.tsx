@@ -7,16 +7,44 @@ import Icon from "./Icon";
 import { Avatar } from "./ui";
 import { api } from "@/lib/admin-client";
 
-const NAV = [
+type NavItem = {
+  href: string;
+  label: string;
+  icon: string;
+  roles?: string[]; // tanımlıysa sadece bu rollere görünür
+};
+
+const NAV: NavItem[] = [
   { href: "/admin", label: "Genel Bakış", icon: "dashboard" },
+  { href: "/admin/analytics", label: "Analitik", icon: "chart" },
   { href: "/admin/teachers", label: "Öğretmenler", icon: "teachers" },
   { href: "/admin/users", label: "Kullanıcılar", icon: "users" },
   { href: "/admin/sessions", label: "Oturumlar", icon: "sessions" },
   { href: "/admin/categories", label: "Kategoriler", icon: "categories" },
   { href: "/admin/chains", label: "Mentor Zincirleri", icon: "chains" },
+  { href: "/admin/notifications", label: "Bildirimler", icon: "bell" },
+  { href: "/admin/reports", label: "Şikayetler", icon: "flag" },
+  {
+    href: "/admin/admins",
+    label: "Adminler",
+    icon: "shield",
+    roles: ["super_admin"],
+  },
+  {
+    href: "/admin/audit-log",
+    label: "Audit Log",
+    icon: "log",
+    roles: ["super_admin"],
+  },
 ];
 
 type Admin = { name: string; email: string; role: string };
+
+const ROLE_LABEL: Record<string, string> = {
+  super_admin: "Süper Admin",
+  admin: "Admin",
+  moderator: "Moderatör",
+};
 
 export default function AdminShell({
   admin,
@@ -65,8 +93,10 @@ export default function AdminShell({
           </div>
         </div>
 
-        <nav className="flex-1 space-y-1 px-3 py-2">
-          {NAV.map((item) => {
+        <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-2">
+          {NAV.filter(
+            (item) => !item.roles || item.roles.includes(admin.role),
+          ).map((item) => {
             const active = isActive(item.href);
             return (
               <Link
@@ -94,7 +124,7 @@ export default function AdminShell({
                 {admin.name}
               </p>
               <p className="truncate text-[11px] text-slate-400">
-                {admin.email}
+                {ROLE_LABEL[admin.role] ?? admin.role} · {admin.email}
               </p>
             </div>
           </div>

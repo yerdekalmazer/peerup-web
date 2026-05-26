@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import Link from "next/link";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { api } from "@/lib/admin-client";
 import Icon from "@/components/admin/Icon";
 import {
@@ -45,6 +46,12 @@ const empty = {
 export default function UsersPage() {
   const [users, setUsers] = useState<User[] | null>(null);
   const [query, setQuery] = useState("");
+  const [roleFilter, setRoleFilter] = useState<"all" | "student" | "teacher">(
+    "all",
+  );
+  const [statusFilter, setStatusFilter] = useState<
+    "all" | "active" | "suspended"
+  >("all");
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState<User | null>(null);
   const [form, setForm] = useState(empty);
@@ -61,6 +68,15 @@ export default function UsersPage() {
   useEffect(() => {
     load().catch((e) => setError(e.message));
   }, [load]);
+
+  const visible = useMemo(() => {
+    if (!users) return null;
+    return users.filter(
+      (u) =>
+        (roleFilter === "all" || u.role === roleFilter) &&
+        (statusFilter === "all" || u.status === statusFilter),
+    );
+  }, [users, roleFilter, statusFilter]);
 
   function openCreate() {
     setEditing(null);
@@ -131,11 +147,14 @@ export default function UsersPage() {
     }
   }
 
-  async function toggleStatus(u: User) {
+  async function toggleBan(u: User) {
     try {
-      await api.put(`/api/admin/users/${u.id}`, {
-        status: u.status === "active" ? "suspended" : "active",
-      });
+      if (u.status === "suspended") {
+        await api.post(`/api/admin/users/${u.id}/unban`);
+      } else {
+        const reason = prompt(`"${u.name}" neden askıya alınıyor?`) ?? "";
+        await api.post(`/api/admin/users/${u.id}/ban`, { reason });
+      }
       await load();
     } catch (err) {
       alert(err instanceof Error ? err.message : "Güncellenemedi");
@@ -146,32 +165,63 @@ export default function UsersPage() {
     <>
       <PageHeader
         title="Kullanıcılar"
-        subtitle={`${users?.length ?? 0} kayıt`}
+        subtitle={`${visible?.length ?? 0} / ${users?.length ?? 0} kayıt`}
         action={
-          <Button onClick={openCreate}>
-            <Icon name="plus" size={16} />
-            Yeni Kullanıcı
-          </Button>
+          <div className="flex flex-wrap items-center gap-2">
+            <a
+              href="/api/admin/exports/users.csv"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50"
+            >
+              <Icon name="download" size={14} />
+              CSV
+            </a>
+            <Button onClick={openCreate}>
+              <Icon name="plus" size={16} />
+              Yeni Kullanıcı
+            </Button>
+          </div>
         }
       />
 
-      <div className="mb-4 flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2">
-        <Icon name="search" size={16} className="text-slate-400" />
-        <input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="İsim veya e-postaya göre ara…"
-          className="w-full bg-transparent text-sm outline-none"
-        />
+      <div className="mb-4 grid gap-2 sm:grid-cols-[1fr_auto_auto]">
+        <div className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2">
+          <Icon name="search" size={16} className="text-slate-400" />
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="İsim veya e-postaya göre ara…"
+            className="w-full bg-transparent text-sm outline-none"
+          />
+        </div>
+        <Select
+          value={roleFilter}
+          onChange={(e) =>
+            setRoleFilter(e.target.value as typeof roleFilter)
+          }
+        >
+          <option value="all">Tüm roller</option>
+          <option value="student">Öğrenci</option>
+          <option value="teacher">Öğretmen</option>
+        </Select>
+        <Select
+          value={statusFilter}
+          onChange={(e) =>
+            setStatusFilter(e.target.value as typeof statusFilter)
+          }
+        >
+          <option value="all">Tüm durumlar</option>
+          <option value="active">Aktif</option>
+          <option value="suspended">Askıda</option>
+        </Select>
       </div>
 
       {error && !modalOpen && <ErrorBanner message={error} />}
 
-      {!users ? (
+      {!visible ? (
         <Spinner />
-      ) : users.length === 0 ? (
+      ) : visible.length === 0 ? (
         <Card>
-          <EmptyState text="Kullanıcı bulunamadı" />
+          <EmptyState text="Eşleşen kullanıcı yok" />
         </Card>
       ) : (
         <Card className="overflow-hidden">
@@ -187,13 +237,16 @@ export default function UsersPage() {
                 </tr>
               </thead>
               <tbody>
-                {users.map((u) => (
+                {visible.map((u) => (
                   <tr
                     key={u.id}
                     className="border-b border-slate-50 last:border-0 hover:bg-slate-50/60"
                   >
                     <td className="px-4 py-3">
-                      <div className="flex items-center gap-3">
+                      <Link
+                        href={`/admin/users/${u.id}`}
+                        className="flex items-center gap-3"
+                      >
                         <Avatar text={u.avatar} color={u.avatarColor} />
                         <div>
                           <p className="font-semibold text-slate-800">
@@ -201,7 +254,7 @@ export default function UsersPage() {
                           </p>
                           <p className="text-xs text-slate-400">{u.email}</p>
                         </div>
-                      </div>
+                      </Link>
                     </td>
                     <td className="px-4 py-3">
                       <Badge tone={u.role === "teacher" ? "indigo" : "slate"}>
@@ -215,14 +268,30 @@ export default function UsersPage() {
                       </span>
                     </td>
                     <td className="px-4 py-3">
-                      <button onClick={() => toggleStatus(u)}>
-                        <Badge tone={u.status === "active" ? "green" : "red"}>
-                          {u.status === "active" ? "Aktif" : "Askıda"}
-                        </Badge>
-                      </button>
+                      <Badge tone={u.status === "active" ? "green" : "red"}>
+                        {u.status === "active" ? "Aktif" : "Askıda"}
+                      </Badge>
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex justify-end gap-1">
+                        <Link
+                          href={`/admin/users/${u.id}`}
+                          className="inline-flex items-center justify-center rounded-lg px-3 py-1.5 text-xs font-semibold text-slate-500 hover:bg-slate-100 hover:text-slate-700"
+                          aria-label="Detay"
+                        >
+                          Detay
+                        </Link>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => toggleBan(u)}
+                          className="hover:bg-amber-50 hover:text-amber-600"
+                          aria-label={
+                            u.status === "active" ? "Askıya al" : "Aç"
+                          }
+                        >
+                          <Icon name="ban" size={15} />
+                        </Button>
                         <Button
                           variant="ghost"
                           size="sm"
