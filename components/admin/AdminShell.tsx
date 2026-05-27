@@ -25,6 +25,7 @@ const NAV: NavItem[] = [
   { href: "/admin/chains", label: "Mentor Zincirleri", icon: "chains" },
   { href: "/admin/notifications", label: "Bildirimler", icon: "bell" },
   { href: "/admin/reports", label: "Şikayetler", icon: "flag" },
+  { href: "/admin/applications", label: "Mentor Başvuruları", icon: "graduation" },
   {
     href: "/admin/admins",
     label: "Adminler",

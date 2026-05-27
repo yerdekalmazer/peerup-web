@@ -28,6 +28,8 @@ const PATHS: Record<string, string> = {
   trend: "M23 6l-9.5 9.5-5-5L1 18 M17 6h6v6",
   shield:
     "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z",
+  graduation:
+    "M22 10v6 M2 10l10-5 10 5-10 5-10-5z M6 12v5c3 3 9 3 12 0v-5",
   bolt: "M13 2L3 14h9l-1 8 10-12h-9l1-8z",
   menu: "M3 12h18 M3 6h18 M3 18h18",
   bell:
